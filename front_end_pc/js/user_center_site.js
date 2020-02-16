@@ -35,9 +35,11 @@ var vm = new Vue({
                 responseType: 'json'
             })
             .then(response => {
+
                 this.provinces = response.data;
             })
             .catch(error => {
+
                 alert(error.response.data);
             });
         axios.get(this.host + '/users/'+user_id+'/addresses/', {
