@@ -34,8 +34,8 @@ var vm = new Vue({
             }
 
             // 检查重名
-            if (this.error_name == false) {
-                axios.get(this.host + '/username/' + this.username, {
+            if (this.error_name == false){
+                axios.get(this.host + '/username/' + this.username + '/', {
                         responseType: 'json'
                     })
                     .then(response => {
@@ -78,7 +78,7 @@ var vm = new Vue({
 
             // 检验该电话号码是否注册
             if(this.error_phone == false) {
-            	axios.get(this.host + '/mobile/' + this.mobile, {
+            	axios.get(this.host + '/mobile/' + this.mobile + '/', {
             		responseType:'json'
             	})
             	.then(response => {
@@ -122,7 +122,7 @@ var vm = new Vue({
             }
 
             // 向后端接口发送请求，让后端发送短信验证码
-            axios.get(this.host + '/sms_codes/' + this.mobile , {
+            axios.get(this.host + '/sms_codes/' + this.mobile + '/' , {
                     responseType: 'json'
                 })
                 .then(response => {

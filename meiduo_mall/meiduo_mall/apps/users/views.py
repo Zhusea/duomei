@@ -27,13 +27,12 @@ class MobileView(APIView):
 
         mobile_count = User.objects.filter(mobile=mobile).count()
 
-        return Response({'monile':mobile, 'count':mobile_count})
+        return Response({'mobile':mobile, 'count':mobile_count})
 
 
 # url users/
 class RegisterView(CreateAPIView):
     """用户注册视图"""
     serializer_class = UserSerializer
-
 
 

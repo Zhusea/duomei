@@ -1,9 +1,6 @@
-from django.shortcuts import render
 from django_redis import get_redis_connection
 import random
 from rest_framework.views import APIView
-from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 

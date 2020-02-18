@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^docs/', include_docs_urls(title='接口文档')),
     url(r'^', include('verifications.urls')),
-    url(r'^', include('users.urls'))
+    url(r'^', include('users.urls')),
+    url(r'^oauth/', include('oauth.urls')),
 ]

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['api.meiduo.site','127.0.0.1']
 
 # Application definition
 
+# 应用注册
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',  # 解除跨域应用注册
     'rest_framework',  # 注册rest_framework
+
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
+    'oauth.apps.OauthConfig',
 ]
 
 # 中间件
@@ -159,6 +162,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+# 静态文件路径
 STATIC_URL = '/static/'
 
 # 日志
@@ -203,6 +207,7 @@ LOGGING = {
     }
 }
 
+# rest_framework配置
 REST_FRAMEWORK = {
     # 异常处理
     'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.exception_handler',
@@ -220,6 +225,7 @@ REST_FRAMEWORK = {
 }
 
 
+# djangorestframework-jwt配置
 JWT_AUTH = {
     # token时效
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
@@ -229,8 +235,13 @@ JWT_AUTH = {
 }
 
 
-# 使用自定义用户模型类
+# django认证系统使用的模型类
 AUTH_USER_MODEL = 'users.User'
+
+# django认证后端方法
+AUTHENTICATION_BACKENDS = [
+    'users.utils.UsernameMobileAuthBackend',
+]
 
 # CORS: 设置跨域请求的白名单
 CORS_ORIGIN_WHITELIST = (
@@ -239,3 +250,9 @@ CORS_ORIGIN_WHITELIST = (
     'http://www.meiduo.site:8080',
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
+
+# QQ登录参数
+QQ_CLIENT_ID = '101474184'
+QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'
+QQ_STATE = '/'
