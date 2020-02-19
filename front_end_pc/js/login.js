@@ -1,11 +1,10 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        host,
+        host: host,
         error_username: false,
-        error_password: false,
-        error_password_message: '',
-        error_username_message:'',
+        error_pwd: false,
+        error_pwd_message: '请填写密码',
         username: '',
         password: '',
         remember: false
@@ -21,20 +20,19 @@ var vm = new Vue({
             return null;
         },
         // 检查数据
-       check_username:function (){
-            if(!this.username) {
-                this.error_username_message = '输入有效用户名';
+        check_username: function(){
+            if (!this.username) {
                 this.error_username = true;
             } else {
                 this.error_username = false;
             }
         },
-        check_pwd:function (){
-            if(!this.password) {
-                this.error_password_message = '输入有效密码';
-                this.error_password = true;
+        check_pwd: function(){
+            if (!this.password) {
+                this.error_pwd_message = '请填写密码';
+                this.error_pwd = true;
             } else {
-                this.error_password = false;
+                this.error_pwd = false;
             }
         },
         // 表单提交
@@ -85,19 +83,18 @@ var vm = new Vue({
         },
         // qq登录
         qq_login: function(){
+            //
             var next = this.get_query_string('next') || '/';
             axios.get(this.host + '/oauth/qq/authorization/?next=' + next, {
                     responseType: 'json'
                 })
                 .then(response => {
-                    url = response.data.login_url;
                     location.href = response.data.login_url;
-                    console.log(response.data.login_url);
                 })
                 .catch(error => {
-                    status = error.response;
-                    console.log(error.response);
+                    console.log(error.response.data);
                 })
         }
     }
 });
+

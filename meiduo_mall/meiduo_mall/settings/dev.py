@@ -256,3 +256,14 @@ QQ_CLIENT_ID = '101474184'
 QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'
 QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'
 QQ_STATE = '/'
+EXPIRES_IN = 60 * 60 * 24
+
+
+# 发送邮件的配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '806635445@qq.com' # 你的 QQ 账号
+EMAIL_HOST_PASSWORD = 'pmeyunitbdhbbgab'
+EMAIL_USE_TLS = True # 这里必须是 True，否则发送不成功
+EMAIL_FROM = '806635445@qq.com' # 你的 QQ 账号
