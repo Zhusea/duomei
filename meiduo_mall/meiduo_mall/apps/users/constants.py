@@ -1,0 +1,2 @@
+# 最大收获地址
+USER_ADDRESS_COUNTS_LIMIT = 20

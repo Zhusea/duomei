@@ -15,7 +15,7 @@ class SMSCodesView(APIView):
     def get(self, request, mobile):
         # 连接redis
         redis_conn = get_redis_connection('verify_codes')
-        # 查询该号码是否注册
+        # 查询该号码是否在60秒内发送短信
         is_have_flag = redis_conn.get('sms_flag_{}'.format(mobile))
         if is_have_flag:
             return Response({'message':'发短信过于频繁'}, status=status.HTTP_400_BAD_REQUEST)

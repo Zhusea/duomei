@@ -5,7 +5,7 @@ from .views import AreasViewSet
 
 router = DefaultRouter()
 
-router.register('areas', AreasViewSet, basename='areas')
+router.register(r'areas', AreasViewSet, basename='areas')
 
 urlpatterns = [
 

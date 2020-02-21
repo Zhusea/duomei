@@ -20,8 +20,11 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),  # 富文本路径
     url(r'^docs/', include_docs_urls(title='接口文档')),
-    url(r'^', include('verifications.urls')),
-    url(r'^', include('users.urls')),
+    url(r'', include('verifications.urls')),
+    url(r'', include('users.urls')),
     url(r'^oauth/', include('oauth.urls')),
+    url(r'', include('areas.urls')),
+
 ]
