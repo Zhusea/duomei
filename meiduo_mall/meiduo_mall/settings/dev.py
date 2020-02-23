@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',  # 注册rest_framework
     'ckeditor',  # 富文本编辑器
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
+    'django_crontab',  # 定时任务
 
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
@@ -226,7 +227,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         # 基础认证
         'rest_framework.authentication.BasicAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'meiduo_mall.utils.pagination.MyPageNumberPagination',
 }
 
 
@@ -286,7 +288,7 @@ REST_FRAMEWORK_EXTENSIONS = {
 FDFS_CLIENT_CONF = os.path.join(BASE_DIR,'utils/fdfs/client.conf')
 
 # 设置fdfs存储服务器上nginx的IP和端口号
-FDFS_URL='http://192.168.88.134:8888/'
+FDFS_URL='http://image.meiduo.site:8888/'
 
 # 设置Django的文件存储类
 DEFAULT_FILE_STORAGE='meiduo_mall.utils.fdfs.fdfs.FastDFSStorage'
@@ -300,3 +302,14 @@ CKEDITOR_CONFIGS = {
     },
 }
 CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，使用了FastDFS，所以此处设为''
+
+# 生成主页静态文件路径
+GENERATED_STATIC_HTML_FILES_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc')
+
+# 定时任务
+CRONJOBS = [
+    # 每5分钟执行一次生成主页静态文件
+    ('*/5 * * * *', 'contents.crons.generate_static_index_html', '>> /home/zhuhai/PycharmProjects/duomei/meiduo_mall/logs/crontab.log')
+]
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
+
