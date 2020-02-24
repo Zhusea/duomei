@@ -3,6 +3,9 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from drf_haystack.viewsets import HaystackViewSet
+from rest_framework.views import APIView
+import json
 
 from .serializers import SKUSerializer
 from .models import SKU
@@ -10,6 +13,8 @@ from .contents import HOT_SKUS_COUNT_LIMIT
 from .models import GoodsCategory
 from .serializers import ChannelSerializer
 from .serializers import CategorySerializer
+from .serializers import SKUIndexSerializer
+from contents.utils import get_categories
 # Create your views here.
 
 class HostView(ListAPIView):
@@ -59,3 +64,14 @@ class CategoryView(GenericAPIView):
             ret['cat1'] = ChannelSerializer(category.parent.goodschannel_set.all()[0]).data
 
         return Response(ret)
+
+
+class SKUSearchViewSet(HaystackViewSet):
+    """
+    SKU搜索
+    """
+    index_models = [SKU]
+
+    serializer_class = SKUIndexSerializer
+
+

@@ -9,8 +9,7 @@ from .views import UserDetailView
 from .views import UserEmailView
 from .views import EmailVerificationView
 from .views import AddressViewSet
-
-
+from .views import UserGoodsHistoryView
 urlpatterns = [
     url(r'^username/(?P<username>\w{5,20})/$', UsernameView.as_view()),  # 校验username路由
     url(r'^mobile/(?P<mobile>1[3456789]\d{9})/$', MobileView.as_view()),  # 校验电话号码路由
@@ -19,7 +18,7 @@ urlpatterns = [
     url(r'^user/$',UserDetailView.as_view()),  # 用户跟人信息详情页
     url(r'^email/$',UserEmailView.as_view()),  # 修改用户的email信息
     url(r'^emails/verification/$', EmailVerificationView.as_view()),  # 邮件校验路由
-    # url(r'^addresses/$', AddresssesView.as_view()),  # 个人地址数据路由
+    url(r'^browse_histories/$', UserGoodsHistoryView.as_view()),  # 个人历史浏览记录
 
 ]
 router = DefaultRouter()

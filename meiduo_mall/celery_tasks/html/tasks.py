@@ -96,3 +96,20 @@ def generate_static_list_html():
 
     with open(file_path, 'w') as f:
         f.write(html_text)
+
+@app.task(name='generate_static_search_html')
+def generate_static_search_html():
+
+    categories = get_categories()
+
+    # 使用`detail.html`文件，进行模板渲染，获取渲染之后的内容
+    context = {
+        'categories': categories,
+    }
+    template = loader.get_template('search.html')
+    html_text = template.render(context)
+    # 将渲染之后的内容保存成一个静态文件
+    file_path = os.path.join(settings.GENERATED_STATIC_HTML_FILES_DIR, 'search.html')
+
+    with open(file_path, 'w') as f:
+        f.write(html_text)

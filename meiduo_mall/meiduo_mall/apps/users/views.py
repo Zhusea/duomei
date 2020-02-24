@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from rest_framework.decorators import action
+from django_redis import get_redis_connection
 
 from .models import User
 from .serializers import UserSerializer
@@ -14,6 +15,8 @@ from .serializers import UserEmailSerializer
 from .serializers import AddressesSerializer
 from . import constants
 from .serializers import AddressTitleSerializer
+from goods.models import SKU
+from goods.serializers import SKUSerializer
 # Create your views here.
 
 # url username/(?P<username>\w{5,20})
@@ -83,7 +86,7 @@ class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericVi
     """
     serializer_class = AddressesSerializer
     permissions = [IsAuthenticated]
-
+    pagination_class = None
     def get_queryset(self):
         return self.request.user.addresses.filter(is_deleted=False)
 
@@ -149,4 +152,52 @@ class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericVi
         serializer = AddressTitleSerializer(instance=address, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
+
+
+
+
+class UserGoodsHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        """添加历史纪录"""
+        # 获取用户id
+        user_id = request.user.id
+        sku_id = request.data.get('sku_id')
+        try:
+            sku_obj = SKU.objects.get(id=sku_id)
+        except SKU.DoesNotExist:
+            return Response({'message':'没有该商品'},status=status.HTTP_400_BAD_REQUEST)
+        redis_conn = get_redis_connection('history')
+        pl = redis_conn.pipeline()
+        # 移除已经存在的本商品浏览记录
+        pl.lrem("history_%s" % user_id, 0, sku_id)
+        # 添加新的浏览记录
+        pl.lpush("history_%s" % user_id, sku_id)
+        # 只保存最多5条记录
+        pl.ltrim("history_%s" % user_id, 0, constants.USER_BROWSING_HISTORY_COUNTS_LIMIT - 1)
+
+        pl.execute()
+        return Response({'message':'ok'})
+
+    def get(self, request):
+        """获取历史记录"""
+
+        user_id = request.user.id
+
+        redis_conn = get_redis_connection('history')
+        sku_id_list = redis_conn.lrange('history_{}'.format(user_id),0, constants.USER_BROWSING_HISTORY_COUNTS_LIMIT)
+
+        sku_obj = []
+        for sku_id in sku_id_list:
+            try:
+                sku = SKU.objects.get(id=sku_id)
+            except SKU.DoesNotExist:
+                pass
+            else:
+                sku_obj.append(sku)
+
+        serializer = SKUSerializer(sku_obj, many=True)
+
         return Response(serializer.data)

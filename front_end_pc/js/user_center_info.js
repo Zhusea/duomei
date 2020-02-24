@@ -29,6 +29,18 @@ var vm = new Vue({
                     this.mobile = response.data.mobile;
                     this.email = response.data.email;
                     this.email_active = response.data.email_activate;
+                    axios.get(this.host + '/browse_histories/', {
+                            headers: {
+                                'Authorization': 'JWT ' + this.token
+                            },
+                            responseType: 'json'
+                        })
+                        .then(response => {
+                            this.histories = response.data;
+                            for(var i=0; i<this.histories.length; i++){
+                                this.histories[i].url = '/goods/' + this.histories[i].id + '.html';
+                            }
+                        })
 
                 })
                 .catch(error => {

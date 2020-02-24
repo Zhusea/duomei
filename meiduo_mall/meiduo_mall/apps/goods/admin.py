@@ -68,15 +68,17 @@ class GoodsChannelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
 
-        from celery_tasks.html.tasks import generate_static_list_html
+        from celery_tasks.html.tasks import generate_static_list_html,generate_static_search_html
+        generate_static_list_html.delay()
         generate_static_list_html.delay()
 
     def delete_model(self, request, obj):
         sku_id = obj.sku.id
         obj.delete()
 
-        from celery_tasks.html.tasks import generate_static_list_html
+        from celery_tasks.html.tasks import generate_static_list_html,generate_static_search_html
         generate_static_list_html.delay()
+        generate_static_search_html.delay()
 
 
 admin.site.register(models.GoodsCategory, GoodsCategoryAdmin)
