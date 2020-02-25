@@ -6,10 +6,11 @@ from rest_framework.generics import GenericAPIView
 from drf_haystack.viewsets import HaystackViewSet
 from rest_framework.views import APIView
 import json
+from rest_framework_jwt.views import ObtainJSONWebToken
 
 from .serializers import SKUSerializer
 from .models import SKU
-from .contents import HOT_SKUS_COUNT_LIMIT
+from .constants import HOT_SKUS_COUNT_LIMIT
 from .models import GoodsCategory
 from .serializers import ChannelSerializer
 from .serializers import CategorySerializer
@@ -35,9 +36,6 @@ class SKUListView(ListAPIView):
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         return SKU.objects.filter(category_id=category_id, is_launched=True)
-
-
-
 
 class CategoryView(GenericAPIView):
     queryset = GoodsCategory.objects.all()
@@ -65,7 +63,6 @@ class CategoryView(GenericAPIView):
 
         return Response(ret)
 
-
 class SKUSearchViewSet(HaystackViewSet):
     """
     SKU搜索
@@ -73,5 +70,6 @@ class SKUSearchViewSet(HaystackViewSet):
     index_models = [SKU]
 
     serializer_class = SKUIndexSerializer
+
 
 

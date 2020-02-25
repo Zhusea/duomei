@@ -7,6 +7,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 from rest_framework.decorators import action
 from django_redis import get_redis_connection
+from rest_framework_jwt.views import ObtainJSONWebToken
 
 from .models import User
 from .serializers import UserSerializer
@@ -17,6 +18,7 @@ from . import constants
 from .serializers import AddressTitleSerializer
 from goods.models import SKU
 from goods.serializers import SKUSerializer
+from cart.utils import merge_cart_cookie_to_redis
 # Create your views here.
 
 # url username/(?P<username>\w{5,20})
@@ -29,7 +31,6 @@ class UsernameView(APIView):
 
         return Response({'username':username, 'count':username_count})
 
-
 # url mobile/(?P<mobile>1[345678]\d{9}$)
 class MobileView(APIView):
     """电话号码校视图"""
@@ -38,7 +39,6 @@ class MobileView(APIView):
         mobile_count = User.objects.filter(mobile=mobile).count()
 
         return Response({'mobile':mobile, 'count':mobile_count})
-
 
 # url users/
 class RegisterView(CreateAPIView):
@@ -77,8 +77,6 @@ class EmailVerificationView(APIView):
             return Response({'message':'token错误'},status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message':'OK'})
-
-
 
 class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     """
@@ -154,9 +152,6 @@ class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericVi
         serializer.save()
         return Response(serializer.data)
 
-
-
-
 class UserGoodsHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -201,3 +196,15 @@ class UserGoodsHistoryView(APIView):
         serializer = SKUSerializer(sku_obj, many=True)
 
         return Response(serializer.data)
+
+
+class UserAuthorizeView(ObtainJSONWebToken):
+    def post(self, request):
+        response = super().post(request)
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data.get('user')
+            response = merge_cart_cookie_to_redis(request, response, user)
+
+        return response
