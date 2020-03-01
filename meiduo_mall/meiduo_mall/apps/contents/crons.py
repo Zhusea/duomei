@@ -20,7 +20,7 @@ def generate_static_index_html():
     # categories = {
     #     1: { # 组1
     #         'channels': [{'id':, 'name':, 'url':},{}, {}...],
-    #         'sub_cats': [[],[]]
+    #         'sub_cats': [cat2对象]
     #     },
     #     2: { # 组2
     #

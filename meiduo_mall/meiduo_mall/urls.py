@@ -17,9 +17,11 @@ from django.conf.urls import url
 from django.conf.urls import include
 from django.contrib import admin
 from rest_framework.documentation import include_docs_urls
+import xadmin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
+    url(r'^xadmin/', include(xadmin.site.urls)),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),  # 富文本路径
     url(r'^docs/', include_docs_urls(title='接口文档')),
     url(r'', include('verifications.urls')),
@@ -28,5 +30,6 @@ urlpatterns = [
     url(r'', include('areas.urls')),
     url(r'', include('goods.urls')),
     url(r'',include('cart.urls')),
+    url(r'', include('orders.urls'))
 
 ]

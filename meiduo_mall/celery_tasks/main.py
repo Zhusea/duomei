@@ -21,4 +21,4 @@ app.autodiscover_tasks(['celery_tasks.sms','celery_tasks.email','celery_tasks.ht
 
 
 # todo：启动命令
-# celery -A celery_tasks worker -l info
+# celery -A celery_tasks.main worker -l info

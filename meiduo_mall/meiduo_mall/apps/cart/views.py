@@ -42,8 +42,7 @@ class CartView(APIView):
                     sku_obj.chioce = sku_id in chioces
                     sku_objs.append(sku_obj)
 
-            serializer = GetCartSerializer(data=sku_objs, many=True)
-            serializer.is_valid()
+            serializer = GetCartSerializer(sku_objs, many=True)
             return Response(serializer.data)
         else:
             """用户未登录，从cookies获取数据"""
@@ -61,8 +60,7 @@ class CartView(APIView):
                         sku_obj.count = cart_dict[sku_id]['count']
                         sku_obj.chioce = cart_dict[sku_id]['chioce']
                         sku_objs.append(sku_obj)
-                serializer = GetCartSerializer(data=sku_objs, many=True)
-                serializer.is_valid()
+                serializer = GetCartSerializer(sku_objs, many=True)
                 return Response(serializer.data)
             else:
                 return Response({'data':None})

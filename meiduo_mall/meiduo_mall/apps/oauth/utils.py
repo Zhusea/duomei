@@ -10,8 +10,8 @@ from itsdangerous import BadData
 from .exceptions import QQAPIError
 class OAuthQQ(object):
     """请求QQ服务器类"""
-    SECRET_KEY = settings.QQ_CLIENT_SECRET
-    EXPIRES_IN = 600
+    SECRET_KEY = settings.QQ_CLIENT_SECRET  # 密钥
+    EXPIRES_IN = 600  # 时效时间
 
     def __init__(self, client_secret=None, client_id=None, redirect_uri=None,state=None):
         # QQ网站应用客户端id

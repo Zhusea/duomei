@@ -19,7 +19,7 @@ from .serializers import AddressTitleSerializer
 from goods.models import SKU
 from goods.serializers import SKUSerializer
 from cart.utils import merge_cart_cookie_to_redis
-# Create your views here.
+
 
 # url username/(?P<username>\w{5,20})
 class UsernameView(APIView):
@@ -31,6 +31,7 @@ class UsernameView(APIView):
 
         return Response({'username':username, 'count':username_count})
 
+
 # url mobile/(?P<mobile>1[345678]\d{9}$)
 class MobileView(APIView):
     """电话号码校视图"""
@@ -40,10 +41,12 @@ class MobileView(APIView):
 
         return Response({'mobile':mobile, 'count':mobile_count})
 
+
 # url users/
 class RegisterView(CreateAPIView):
     """用户注册视图"""
     serializer_class = UserSerializer
+
 
 # url user/
 class UserDetailView(RetrieveAPIView):
@@ -54,12 +57,14 @@ class UserDetailView(RetrieveAPIView):
 
         return self.request.user
 
+
 # url email/
 class UserEmailView(UpdateAPIView):
     serializer_class = UserEmailSerializer
     permission_classes = [IsAuthenticated]
     def get_object(self):
         return self.request.user
+
 
 # url emails/verification/
 class EmailVerificationView(APIView):
@@ -78,13 +83,13 @@ class EmailVerificationView(APIView):
 
         return Response({'message':'OK'})
 
+
 class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     """
     用户地址新增与修改
     """
     serializer_class = AddressesSerializer
     permissions = [IsAuthenticated]
-    pagination_class = None
     def get_queryset(self):
         return self.request.user.addresses.filter(is_deleted=False)
 
@@ -151,6 +156,7 @@ class AddressViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, GenericVi
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
 
 class UserGoodsHistoryView(APIView):
     permission_classes = [IsAuthenticated]

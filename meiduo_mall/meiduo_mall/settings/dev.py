@@ -47,6 +47,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
     'django_crontab',  # 定时任务
     'haystack',  # 全文检索
+    # 后台管理xadmin
+    'xadmin',
+    'crispy_forms',
+    'reversion',
 
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
@@ -54,6 +58,8 @@ INSTALLED_APPS = [
     'areas.apps.AreasConfig',
     'contents.apps.ContentsConfig',
     'goods.apps.GoodsConfig',
+    'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 # 中间件
@@ -187,6 +193,7 @@ USE_TZ = True
 
 # 静态文件路径
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'front_end_pc/static')
 
 # 日志
 LOGGING = {

@@ -9,6 +9,8 @@ from .models import Area
 
 
 class AreasViewSet(CacheResponseMixin, ReadOnlyModelViewSet):
+    pagination_class = None
+
     def get_queryset(self):
         """
         提供数据集
