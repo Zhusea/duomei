@@ -7,7 +7,7 @@ from decimal import Decimal
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from alipay import AliPay
+from alipay import Alipay
 import os
 
 
@@ -73,7 +73,7 @@ class OrderPayView(APIView):
         except OrderInfo.DoesNotExist:
             return Response({'meaaage':'订单错误'},status=status.HTTP_400_BAD_REQUEST)
 
-        alipay = AliPay(
+        alipay = Alipay(
             appid="2016100100641406",
             app_notify_url=None,
             app_private_key_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app_private_key.pem'),
@@ -102,7 +102,7 @@ class PaymentStatusView(APIView):
         data = request.query_params.dict()
         signature = data.pop("sign")
 
-        alipay = AliPay(
+        alipay = Alipay(
             appid="2016100100641406",
             app_notify_url=None,
             app_private_key_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app_private_key.pem'),
